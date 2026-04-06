@@ -6,6 +6,8 @@ import PaymentList from '../components/payments/PaymentList'
 import PaymentForm from '../components/payments/PaymentForm'
 import PaymentSummary from '../components/payments/PaymentSummary'
 import type { Payment } from '../types'
+import ConfirmDialog from '../components/ui/ConfirmDialog'
+import { useConfirm } from '../hooks/useConfirm'
 
 type FilterStatus = 'all' | 'paid' | 'unpaid' | 'partial'
 
@@ -20,6 +22,7 @@ export default function PaymentsPage() {
   const [preselectedClientId, setPreselectedClientId] = useState<number | null>(null)
   const [viewMonth, setViewMonth] = useState(now.getMonth() + 1)
   const [viewYear, setViewYear] = useState(now.getFullYear())
+  const { confirm, dialogProps } = useConfirm()
 
   const { data: payments = [], isLoading } = useQuery({
     queryKey: ['payments'],
@@ -63,10 +66,14 @@ export default function PaymentsPage() {
     setShowForm(true)
   }
 
-  const handleDelete = (id: number) => {
-    if (confirm('Delete this payment?')) {
-      deleteMutation.mutate(id)
-    }
+  const handleDelete = async (id: number) => {
+    const ok = await confirm({
+      title: 'Delete payment',
+      message: 'This will permanently delete this payment entry.',
+      confirmLabel: 'Delete',
+      variant: 'danger',
+    })
+    if (ok) deleteMutation.mutate(id)
   }
 
   const handleAddForClient = (clientId: number) => {
@@ -124,8 +131,8 @@ export default function PaymentsPage() {
             key={s}
             onClick={() => setFilterStatus(s)}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-colors capitalize ${filterStatus === s
-                ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900'
-                : 'bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-zinc-700'
+              ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900'
+              : 'bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-zinc-700'
               }`}
           >
             {s}
@@ -173,6 +180,11 @@ export default function PaymentsPage() {
           onClose={() => { setShowForm(false); setEditing(null); setPreselectedClientId(null) }}
         />
       )}
+
+      {dialogProps.open && (
+        <ConfirmDialog {...dialogProps} />
+      )}
+
     </div>
   )
 }
