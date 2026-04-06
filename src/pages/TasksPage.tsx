@@ -5,6 +5,8 @@ import { tasksDB, clientsDB } from '../db'
 import TaskList from '../components/tasks/TaskList'
 import TaskForm from '../components/tasks/TaskForm'
 import type { Task } from '../types'
+import FilterDropdown from '../components/ui/FilterDropdown'
+import ActiveFilters from '../components/ui/ActiveFilters'
 
 type FilterStatus = 'all' | 'todo' | 'in-progress' | 'done'
 type FilterPriority = 'all' | 'low' | 'medium' | 'high'
@@ -26,6 +28,11 @@ export default function TasksPage() {
     queryKey: ['clients'],
     queryFn: clientsDB.getAll,
   })
+
+  const clientOptions = [
+    { value: 'all', label: 'All clients' },
+    ...clients.map(c => ({ value: c.id!, label: c.name })),
+  ]
 
   const addMutation = useMutation({
     mutationFn: (data: Omit<Task, 'id'>) => tasksDB.add(data),
@@ -94,69 +101,53 @@ export default function TasksPage() {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-col gap-3">
-
-        {/* Status filter */}
-        <div className="flex flex-wrap gap-2">
-          {(['all', 'todo', 'in-progress', 'done'] as FilterStatus[]).map(s => (
-            <button
-              key={s}
-              onClick={() => setFilterStatus(s)}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors capitalize ${
-                filterStatus === s
-                  ? 'bg-purple-600 text-white'
-                  : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
-              }`}
-            >
-              {s}
-            </button>
-          ))}
-        </div>
-
-        {/* Priority filter */}
-        <div className="flex flex-wrap gap-2">
-          {(['all', 'low', 'medium', 'high'] as FilterPriority[]).map(p => (
-            <button
-              key={p}
-              onClick={() => setFilterPriority(p)}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors capitalize ${
-                filterPriority === p
-                  ? 'bg-purple-600 text-white'
-                  : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
-              }`}
-            >
-              {p}
-            </button>
-          ))}
-        </div>
-
-        {/* Client filter */}
-        <div className="flex flex-wrap gap-2">
-          <button
-            onClick={() => setFilterClient('all')}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-              filterClient === 'all'
-                ? 'bg-purple-600 text-white'
-                : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
-            }`}
-          >
-            All clients
-          </button>
-          {clients.map(c => (
-            <button
-              key={c.id}
-              onClick={() => setFilterClient(c.id!)}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-                filterClient === c.id
-                  ? 'bg-purple-600 text-white'
-                  : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
-              }`}
-            >
-              {c.name}
-            </button>
-          ))}
-        </div>
+      <div className="flex flex-wrap gap-2">
+        <FilterDropdown
+          label="Status"
+          value={filterStatus}
+          onChange={v => setFilterStatus(v as FilterStatus)}
+          options={[
+            { value: 'all', label: 'All statuses' },
+            { value: 'todo', label: 'Todo' },
+            { value: 'in-progress', label: 'In Progress' },
+            { value: 'done', label: 'Done' },
+          ]}
+        />
+        <FilterDropdown
+          label="Priority"
+          value={filterPriority}
+          onChange={v => setFilterPriority(v as FilterPriority)}
+          options={[
+            { value: 'all', label: 'All priorities' },
+            { value: 'low', label: 'Low' },
+            { value: 'medium', label: 'Medium' },
+            { value: 'high', label: 'High' },
+          ]}
+        />
+        <FilterDropdown
+          label="Client"
+          value={filterClient}
+          onChange={v => setFilterClient(v === 'all' ? 'all' : Number(v))}
+          options={clientOptions}
+        />
       </div>
+
+      {/* Active filters */}
+      <ActiveFilters
+        filters={[
+          ...(filterStatus !== 'all' ? [{ label: filterStatus, onRemove: () => setFilterStatus('all') }] : []),
+          ...(filterPriority !== 'all' ? [{ label: filterPriority, onRemove: () => setFilterPriority('all') }] : []),
+          ...(filterClient !== 'all' ? [{
+            label: clients.find(c => c.id === filterClient)?.name ?? '',
+            onRemove: () => setFilterClient('all')
+          }] : []),
+        ]}
+        onClearAll={() => {
+          setFilterStatus('all')
+          setFilterPriority('all')
+          setFilterClient('all')
+        }}
+      />
 
       {/* List */}
       {isLoading ? (
