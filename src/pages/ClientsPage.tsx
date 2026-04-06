@@ -122,7 +122,7 @@ export default function ClientsPage() {
 
       {/* List */}
       {isLoading ? (
-        <div className="text-sm text-gray-400 dark:text-gray-600">Loading...</div>
+        <div className="text-sm text-gray-400 dark:text-gray-400">Loading...</div>
       ) : (
         <ClientList
           clients={filtered}

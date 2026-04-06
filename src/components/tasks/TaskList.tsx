@@ -14,7 +14,7 @@ export default function TaskList({ tasks, clients, onDelete, onEdit, onStatusCha
 
   if (tasks.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 text-gray-400 dark:text-gray-600">
+      <div className="flex flex-col items-center justify-center py-20 text-gray-400 dark:text-gray-400">
         <p className="text-lg font-medium">No tasks yet</p>
         <p className="text-sm mt-1">Add your first task to get started</p>
       </div>

@@ -47,14 +47,14 @@ export default function FilterDropdown({ label, options, value, onChange, count 
       </button>
 
       {open && (
-        <div className="absolute top-full left-0 mt-2 w-52 bg-white dark:bg-gray-950 border border-gray-100 dark:border-gray-900 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] z-30 py-2 overflow-hidden">
+        <div className="absolute top-full left-0 mt-2 w-52 bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] z-30 py-2 overflow-hidden">
           {options.map(option => (
             <button
               key={option.value}
               onClick={() => { onChange(option.value); setOpen(false) }}
               className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
                 value === option.value
-                  ? 'text-gray-900 dark:text-white font-semibold bg-gray-50 dark:bg-gray-900'
+                  ? 'text-gray-900 dark:text-white font-semibold bg-gray-50 dark:bg-zinc-900'
                   : 'text-gray-500 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-900'
               }`}
             >

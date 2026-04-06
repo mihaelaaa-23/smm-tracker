@@ -15,7 +15,7 @@ export default function ActiveFilters({ filters, onClearAll }: ActiveFiltersProp
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <SlidersHorizontal size={13} className="text-gray-300 dark:text-gray-700" />
+      <SlidersHorizontal size={13} className="text-gray-300 dark:text-gray-400" />
       {filters.map((filter, i) => (
         <span
           key={i}
@@ -24,7 +24,7 @@ export default function ActiveFilters({ filters, onClearAll }: ActiveFiltersProp
           {filter.label}
           <button
             onClick={filter.onRemove}
-            className="text-gray-300 dark:text-gray-700 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+            className="text-gray-300 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
           >
             <X size={11} />
           </button>
@@ -32,7 +32,7 @@ export default function ActiveFilters({ filters, onClearAll }: ActiveFiltersProp
       ))}
       <button
         onClick={onClearAll}
-        className="text-xs text-gray-300 dark:text-gray-700 hover:text-gray-500 dark:hover:text-gray-400 transition-colors underline underline-offset-2"
+        className="text-xs text-gray-300 dark:text-gray-400 hover:text-gray-500 dark:hover:text-gray-400 transition-colors underline underline-offset-2"
       >
         Remove all
       </button>

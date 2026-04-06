@@ -118,7 +118,7 @@ export default function ClientForm({ initial, onSubmit, onClose }: ClientFormPro
             }`}
           >
             <span className={`block w-5 h-5 rounded-full shadow transition-transform mx-0.5 ${
-              priority ? 'translate-x-6 bg-white dark:bg-gray-900' : 'translate-x-0 bg-white dark:bg-gray-400'
+              priority ? 'translate-x-6 bg-white dark:bg-zinc-900' : 'translate-x-0 bg-white dark:bg-gray-400'
             }`} />
           </button>
         </div>

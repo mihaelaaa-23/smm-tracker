@@ -7,7 +7,7 @@ interface NavbarProps {
 
 export default function Navbar({ toggleTheme, isDark }: NavbarProps) {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 h-16 bg-white dark:bg-black border-b border-gray-100 dark:border-gray-900 flex items-center justify-between px-8">
+    <header className="fixed top-0 left-0 right-0 z-50 h-16 bg-white dark:bg-black border-b border-gray-100 dark:border-zinc-800 flex items-center justify-between px-8">
       <span className="text-base font-bold tracking-widest uppercase text-gray-900 dark:text-white">
         SMM Tracker
       </span>
