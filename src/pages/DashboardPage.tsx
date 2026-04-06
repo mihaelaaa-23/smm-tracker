@@ -91,6 +91,30 @@ export default function DashboardPage() {
         { name: 'Partial', value: partialCount, color: '#f59e0b' },
     ].filter(d => d.value > 0)
 
+    // Tasks due this week
+    const startOfWeek = new Date(now)
+    startOfWeek.setDate(now.getDate() - now.getDay() + 1)
+    startOfWeek.setHours(0, 0, 0, 0)
+    const endOfWeek = new Date(startOfWeek)
+    endOfWeek.setDate(startOfWeek.getDate() + 6)
+    endOfWeek.setHours(23, 59, 59, 999)
+
+    const tasksDueThisWeek = tasks
+        .filter(t => {
+            const d = new Date(t.deadline)
+            return d >= startOfWeek && d <= endOfWeek && t.status !== 'done'
+        })
+        .sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime())
+
+    // Unpaid payments current month
+    const unpaidPayments = currentMonthPayments.filter(p => p.status !== 'paid')
+
+    const priorityStyles: Record<string, string> = {
+        low: 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400',
+        medium: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300',
+        high: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300',
+    }
+
     return (
         <div className="flex flex-col gap-8">
 
@@ -169,7 +193,7 @@ export default function DashboardPage() {
                         Payment status — {formatPeriod(currentMonth, currentYear)}
                     </p>
                     {donutData.length === 0 ? (
-                        <div className="h-[200px] flex items-center justify-center text-sm text-gray-400 dark:text-gray-600">
+                        <div className="h-50 flex items-center justify-center text-sm text-gray-400 dark:text-gray-600">
                             No payments this month
                         </div>
                     ) : (
@@ -210,13 +234,73 @@ export default function DashboardPage() {
                 </div>
             </div>
 
-            {/* Placeholder for lists */}
+            {/* Lists */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div className="bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-2xl p-6 h-48 flex items-center justify-center">
-                    <p className="text-sm text-gray-400">Tasks due this week — coming next</p>
+
+                {/* Tasks due this week */}
+                <div className="bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-2xl p-6 shadow-[0_1px_4px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_4px_rgba(0,0,0,0.3)]">
+                    <p className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">
+                        Tasks due this week · {tasksDueThisWeek.length}
+                    </p>
+                    {tasksDueThisWeek.length === 0 ? (
+                        <p className="text-sm text-gray-400 dark:text-gray-600 py-4">No tasks due this week.</p>
+                    ) : (
+                        <div className="flex flex-col divide-y divide-gray-50 dark:divide-zinc-800">
+                            {tasksDueThisWeek.map(task => {
+                                const client = clients.find(c => c.id === task.clientId)
+                                return (
+                                    <div key={task.id} className="flex items-center gap-3 py-3">
+                                        <div className="flex-1 min-w-0">
+                                            <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{task.title}</p>
+                                            <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{client?.name}</p>
+                                        </div>
+                                        <span className={`text-xs font-medium px-2.5 py-1 rounded-full capitalize shrink-0 ${priorityStyles[task.priority]}`}>
+                                            {task.priority}
+                                        </span>
+                                        <span className="text-xs text-gray-400 dark:text-gray-500 shrink-0">
+                                            {new Date(task.deadline).toLocaleDateString('en-GB')}
+                                        </span>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    )}
                 </div>
-                <div className="bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-2xl p-6 h-48 flex items-center justify-center">
-                    <p className="text-sm text-gray-400">Unpaid payments — coming next</p>
+
+                {/* Unpaid payments */}
+                <div className="bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-2xl p-6 shadow-[0_1px_4px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_4px_rgba(0,0,0,0.3)]">
+                    <p className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">
+                        Unpaid this month · {unpaidPayments.length}
+                    </p>
+                    {unpaidPayments.length === 0 ? (
+                        <p className="text-sm text-emerald-600 dark:text-emerald-400 py-4">All clients paid this month.</p>
+                    ) : (
+                        <div className="flex flex-col divide-y divide-gray-50 dark:divide-zinc-800">
+                            {unpaidPayments.map(payment => {
+                                const client = clients.find(c => c.id === payment.clientId)
+                                return (
+                                    <div key={payment.id} className="flex items-center gap-3 py-3">
+                                        <div className="flex-1 min-w-0">
+                                            <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                                                {client?.name ?? 'Unknown'}
+                                            </p>
+                                            <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{client?.brand}</p>
+                                        </div>
+                                        <span className="text-sm font-bold text-gray-900 dark:text-white shrink-0">
+                                            {payment.amount.toLocaleString()}
+                                            <span className="text-xs text-gray-400 ml-1 font-normal">{payment.currency}</span>
+                                        </span>
+                                        <span className={`text-xs font-medium px-2.5 py-1 rounded-full capitalize shrink-0 ${payment.status === 'unpaid'
+                                            ? 'bg-red-50 text-red-600 dark:bg-red-950/30 dark:text-red-400'
+                                            : 'bg-yellow-50 text-yellow-600 dark:bg-yellow-950/30 dark:text-yellow-400'
+                                            }`}>
+                                            {payment.status}
+                                        </span>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
