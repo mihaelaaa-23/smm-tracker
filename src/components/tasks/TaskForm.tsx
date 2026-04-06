@@ -63,7 +63,7 @@ export default function TaskForm({ initial, clients, onSubmit, onClose }: TaskFo
           <select
             value={clientId}
             onChange={e => setClientId(Number(e.target.value))}
-            className="px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-white/20"
           >
             {clients.map(c => (
               <option key={c.id} value={c.id}>{c.name} · {c.brand}</option>
@@ -78,7 +78,7 @@ export default function TaskForm({ initial, clients, onSubmit, onClose }: TaskFo
             value={title}
             onChange={e => setTitle(e.target.value)}
             placeholder="e.g. 3 Instagram posts"
-            className="px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-white/20"
           />
         </div>
 
@@ -92,7 +92,7 @@ export default function TaskForm({ initial, clients, onSubmit, onClose }: TaskFo
                 onClick={() => setType(t)}
                 className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors capitalize ${
                   type === t
-                    ? 'bg-purple-600 text-white'
+                    ? 'bg-gray-900 text-white'
                     : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
                 }`}
               >
@@ -112,7 +112,7 @@ export default function TaskForm({ initial, clients, onSubmit, onClose }: TaskFo
                 onClick={() => setPriority(p)}
                 className={`flex-1 py-2 rounded-xl text-sm font-medium transition-colors capitalize ${
                   priority === p
-                    ? 'bg-purple-600 text-white'
+                    ? 'bg-gray-900 text-white'
                     : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
                 }`}
               >
@@ -129,7 +129,7 @@ export default function TaskForm({ initial, clients, onSubmit, onClose }: TaskFo
             type="date"
             value={deadline}
             onChange={e => setDeadline(e.target.value)}
-            className="px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-white/20"
           />
         </div>
 
@@ -143,7 +143,7 @@ export default function TaskForm({ initial, clients, onSubmit, onClose }: TaskFo
                 onClick={() => setStatus(s)}
                 className={`flex-1 py-2 rounded-xl text-xs font-medium transition-colors capitalize ${
                   status === s
-                    ? 'bg-purple-600 text-white'
+                    ? 'bg-gray-900 text-white'
                     : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
                 }`}
               >
@@ -159,7 +159,7 @@ export default function TaskForm({ initial, clients, onSubmit, onClose }: TaskFo
           <button
             onClick={() => setNeedsApproval(prev => !prev)}
             className={`w-12 h-6 rounded-full transition-colors ${
-              needsApproval ? 'bg-purple-600' : 'bg-gray-200 dark:bg-gray-700'
+              needsApproval ? 'bg-gray-900' : 'bg-gray-200 dark:bg-gray-700'
             }`}
           >
             <span className={`block w-5 h-5 bg-white rounded-full shadow transition-transform mx-0.5 ${
@@ -176,7 +176,7 @@ export default function TaskForm({ initial, clients, onSubmit, onClose }: TaskFo
             onChange={e => setDescription(e.target.value)}
             placeholder="Any additional details..."
             rows={3}
-            className="px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
+            className="px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-white/20 resize-none"
           />
         </div>
 
@@ -191,7 +191,7 @@ export default function TaskForm({ initial, clients, onSubmit, onClose }: TaskFo
           <button
             onClick={handleSubmit}
             disabled={!title.trim() || !deadline || !clientId}
-            className="flex-1 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium transition-colors"
+            className="flex-1 py-2.5 rounded-xl bg-gray-900 hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium transition-colors"
           >
             {initial ? 'Save Changes' : 'Add Task'}
           </button>
