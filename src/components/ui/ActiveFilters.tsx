@@ -1,4 +1,4 @@
-import { X, Trash2 } from 'lucide-react'
+import { X, SlidersHorizontal } from 'lucide-react'
 
 interface ActiveFilter {
   label: string
@@ -15,26 +15,26 @@ export default function ActiveFilters({ filters, onClearAll }: ActiveFiltersProp
 
   return (
     <div className="flex flex-wrap items-center gap-2">
+      <SlidersHorizontal size={13} className="text-gray-300 dark:text-gray-700" />
       {filters.map((filter, i) => (
         <span
           key={i}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm text-gray-700 dark:text-gray-300"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-800 text-xs font-medium text-gray-600 dark:text-gray-400"
         >
           {filter.label}
           <button
             onClick={filter.onRemove}
-            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
+            className="text-gray-300 dark:text-gray-700 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
           >
-            <X size={13} />
+            <X size={11} />
           </button>
         </span>
       ))}
       <button
         onClick={onClearAll}
-        className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors underline underline-offset-2"
+        className="text-xs text-gray-300 dark:text-gray-700 hover:text-gray-500 dark:hover:text-gray-400 transition-colors underline underline-offset-2"
       >
-        <Trash2 size={13} />
-        Remove all filters
+        Remove all
       </button>
     </div>
   )

@@ -11,19 +11,17 @@ interface FilterDropdownProps {
   options: Option[]
   value: string | number
   onChange: (value: string | number) => void
+  count?: number
 }
 
-export default function FilterDropdown({ label, options, value, onChange }: FilterDropdownProps) {
+export default function FilterDropdown({ label, options, value, onChange, count }: FilterDropdownProps) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
-
-  const selected = options.find(o => o.value === value)
+  const isActive = value !== 'all' && value !== 0
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false)
-      }
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
     }
     document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
@@ -33,26 +31,31 @@ export default function FilterDropdown({ label, options, value, onChange }: Filt
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen(prev => !prev)}
-        className={`flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium transition-colors ${
-          value !== 'all' && value !== 0
-            ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300'
-            : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
+        className={`flex items-center gap-2 px-4 py-2 rounded-full border text-sm transition-all ${
+          isActive
+            ? 'border-gray-900 dark:border-white bg-gray-900 dark:bg-white text-white dark:text-black font-medium'
+            : 'border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-600 font-medium'
         }`}
       >
-        <span>{value !== 'all' && value !== 0 ? selected?.label : label}</span>
-        <ChevronDown size={14} className={`transition-transform ${open ? 'rotate-180' : ''}`} />
+        <span>{label}</span>
+        {isActive && count && (
+          <span className="w-4 h-4 rounded-full bg-white/20 dark:bg-black/20 text-xs flex items-center justify-center">
+            {count}
+          </span>
+        )}
+        <ChevronDown size={13} className={`transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
 
       {open && (
-        <div className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-lg z-30 py-1 overflow-hidden">
+        <div className="absolute top-full left-0 mt-2 w-52 bg-white dark:bg-gray-950 border border-gray-100 dark:border-gray-900 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] z-30 py-2 overflow-hidden">
           {options.map(option => (
             <button
               key={option.value}
               onClick={() => { onChange(option.value); setOpen(false) }}
               className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
                 value === option.value
-                  ? 'bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 font-medium'
-                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
+                  ? 'text-gray-900 dark:text-white font-semibold bg-gray-50 dark:bg-gray-900'
+                  : 'text-gray-500 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-900'
               }`}
             >
               {option.label}
