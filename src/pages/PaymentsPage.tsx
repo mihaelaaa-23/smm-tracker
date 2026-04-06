@@ -125,25 +125,26 @@ export default function PaymentsPage() {
       </div>
 
       {/* Filter bar + search */}
-      <div className="flex items-center gap-2 flex-wrap">
-        {(['all', 'paid', 'unpaid', 'partial'] as FilterStatus[]).map(s => (
-          <button
-            key={s}
-            onClick={() => setFilterStatus(s)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors capitalize ${filterStatus === s
-              ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900'
-              : 'bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-zinc-700'
-              }`}
-          >
-            {s}
-          </button>
-        ))}
-        <div className="flex-1" />
+      <div className="flex flex-col gap-2">
+        <div className="flex flex-wrap gap-2">
+          {(['all', 'paid', 'unpaid', 'partial'] as FilterStatus[]).map(s => (
+            <button
+              key={s}
+              onClick={() => setFilterStatus(s)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors capitalize ${filterStatus === s
+                  ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900'
+                  : 'bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-zinc-700'
+                }`}
+            >
+              {s}
+            </button>
+          ))}
+        </div>
         <input
           value={search}
           onChange={e => setSearch(e.target.value)}
           placeholder="Search client..."
-          className="px-4 py-2 rounded-xl border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-1 focus:ring-white/20 w-44"
+          className="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-1 focus:ring-white/20"
         />
       </div>
 
