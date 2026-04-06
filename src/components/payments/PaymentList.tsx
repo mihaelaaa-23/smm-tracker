@@ -60,7 +60,7 @@ export default function PaymentList({ payments, clients, onDelete, onEdit }: Pay
                                 </span>
                                 {payment.status === 'unpaid' && new Date(payment.date) < new Date() && (
                                     <span className="text-xs font-semibold text-red-500 bg-red-50 dark:bg-red-950/30 px-1.5 py-0.5 rounded shrink-0">
-                                        overdue
+                                        {Math.floor((new Date().getTime() - new Date(payment.date).getTime()) / (1000 * 60 * 60 * 24))}d overdue
                                     </span>
                                 )}
                             </div>
