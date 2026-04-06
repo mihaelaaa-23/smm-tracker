@@ -27,17 +27,18 @@ const statusOptions: Task['status'][] = ['todo', 'in-progress', 'done']
 
 export default function TaskCard({ task, client, onDelete, onEdit, onStatusChange }: TaskCardProps) {
   const deadline = new Date(task.deadline)
-  const isOverdue = deadline < new Date() && task.status !== 'done'
-
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const isOverdue = deadline < today && task.status !== 'done'
   return (
-    <div className="group bg-white dark:bg-gray-950 border border-gray-100 dark:border-gray-900 rounded-2xl p-6 flex flex-col gap-4 shadow-[0_1px_4px_rgba(0,0,0,0.06)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.10)] hover:-translate-y-0.5 transition-all duration-200">
+    <div className="group bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-2xl p-6 flex flex-col gap-4 shadow-[0_1px_4px_rgba(0,0,0,0.06)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.10)] hover:-translate-y-0.5 transition-all duration-200">
 
       {/* Header */}
       <div className="flex items-start justify-between gap-2">
         <div className="flex flex-col gap-0.5">
           <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{task.title}</h3>
           {client && (
-            <span className="text-xs text-gray-400 dark:text-gray-600">{client.name} · {client.brand}</span>
+            <span className="text-xs text-gray-400 dark:text-gray-400">{client.name} · {client.brand}</span>
           )}
         </div>
         <div className="flex items-center gap-0.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -73,18 +74,18 @@ export default function TaskCard({ task, client, onDelete, onEdit, onStatusChang
 
       {/* Description */}
       {task.description && (
-        <p className="text-xs text-gray-400 dark:text-gray-600 line-clamp-2">{task.description}</p>
+        <p className="text-xs text-gray-400 dark:text-gray-400 line-clamp-2">{task.description}</p>
       )}
 
       {/* Footer */}
-      <div className="flex items-center justify-between gap-2 pt-3 border-t border-gray-50 dark:border-gray-900">
+      <div className="flex items-center justify-between gap-2 pt-3 border-t border-gray-50 dark:border-zinc-800">
         <span className={`text-xs font-medium ${isOverdue ? 'text-red-500' : 'text-gray-300 dark:text-gray-700'}`}>
           {isOverdue ? 'Overdue · ' : ''}{deadline.toLocaleDateString('en-GB')}
         </span>
         <select
           value={task.status}
           onChange={e => onStatusChange(task.id!, e.target.value as Task['status'])}
-          className="text-xs font-medium px-2.5 py-1 rounded-full border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-950 text-gray-600 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 cursor-pointer"
+          className="text-xs font-medium px-2.5 py-1 rounded-full border border-gray-100 dark:border-gray-800 bg-white dark:bg-zinc-900 text-gray-600 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 cursor-pointer"
         >
           {statusOptions.map(s => (
             <option key={s} value={s}>{s}</option>
