@@ -13,16 +13,19 @@ export default function DashboardPage() {
     const { data: clients = [] } = useQuery({
         queryKey: ['clients'],
         queryFn: clientsDB.getAll,
+        staleTime: 0,
     })
 
     const { data: tasks = [] } = useQuery({
         queryKey: ['tasks'],
         queryFn: tasksDB.getAll,
+        staleTime: 0,
     })
 
     const { data: payments = [] } = useQuery({
         queryKey: ['payments'],
         queryFn: paymentsDB.getAll,
+        staleTime: 0,
     })
 
     const activeClients = clients.filter(c => c.status === 'active').length
@@ -51,7 +54,10 @@ export default function DashboardPage() {
         },
         {
             label: 'Collected',
-            value: collectedMDL > 0 ? `${collectedMDL.toLocaleString()} MDL` : collectedUSD > 0 ? `${collectedUSD} USD` : '—',
+            value: [
+                collectedMDL > 0 ? `${collectedMDL.toLocaleString()} MDL` : '',
+                collectedUSD > 0 ? `${collectedUSD} USD` : '',
+            ].filter(Boolean).join(' + ') || '—',
             sub: formatPeriod(currentMonth, currentYear),
             highlight: false,
         },
@@ -136,12 +142,21 @@ export default function DashboardPage() {
                         <span className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide">
                             {stat.label}
                         </span>
-                        <span className={`text-3xl font-bold tracking-tight ${stat.highlight
-                            ? 'text-red-500 dark:text-red-400'
-                            : 'text-gray-900 dark:text-white'
-                            }`}>
-                            {stat.value}
-                        </span>
+                        {stat.label === 'Collected' ? (
+                            <div className="flex flex-col gap-0.5">
+                                <span className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                    {collectedMDL > 0 ? `${collectedMDL.toLocaleString()} MDL` : '— MDL'}
+                                </span>
+                                <span className="text-lg font-semibold tracking-tight text-gray-400 dark:text-gray-500">
+                                    {collectedUSD > 0 ? `${collectedUSD} USD` : '— USD'}
+                                </span>
+                            </div>
+                        ) : (
+                            <span className={`text-3xl font-bold tracking-tight ${stat.highlight ? 'text-red-500 dark:text-red-400' : 'text-gray-900 dark:text-white'
+                                }`}>
+                                {stat.value}
+                            </span>
+                        )}
                         <span className="text-xs text-gray-400 dark:text-gray-500">
                             {stat.sub}
                         </span>
