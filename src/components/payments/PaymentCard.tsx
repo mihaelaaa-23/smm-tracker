@@ -64,7 +64,7 @@ export default function PaymentCard({ payment, client, onDelete, onEdit }: Payme
             {payment.period}
           </span>
           {payment.notes && (
-            <span className="text-xs text-gray-300 dark:text-gray-500 truncate max-w-[120px]">
+            <span className="text-xs text-gray-300 dark:text-gray-500 truncate max-w-30">
               {payment.notes}
             </span>
           )}
