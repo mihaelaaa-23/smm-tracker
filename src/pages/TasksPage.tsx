@@ -85,6 +85,7 @@ export default function TasksPage() {
   const filtered = tasks
     .filter(t => filterPriority === 'all' || t.priority === filterPriority)
     .filter(t => filterClient === 'all' || t.clientId === filterClient)
+    .sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime())
 
   return (
     <div className="flex flex-col gap-6">
@@ -103,8 +104,8 @@ export default function TasksPage() {
             <button
               onClick={() => setView('kanban')}
               className={`p-2 rounded-lg transition-colors ${view === 'kanban'
-                  ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-sm'
-                  : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300'
+                ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-sm'
+                : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300'
                 }`}
             >
               <LayoutGrid size={15} />
@@ -112,8 +113,8 @@ export default function TasksPage() {
             <button
               onClick={() => setView('list')}
               className={`p-2 rounded-lg transition-colors ${view === 'list'
-                  ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-sm'
-                  : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300'
+                ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-sm'
+                : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300'
                 }`}
             >
               <List size={15} />
