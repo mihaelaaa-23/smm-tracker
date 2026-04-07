@@ -110,6 +110,7 @@ export default function KanbanBoard({ tasks, clients, onStatusChange, onEdit, on
                                         client={clients.find(c => c.id === task.clientId)}
                                         onEdit={onEdit}
                                         onDelete={onDelete}
+                                        onStatusChange={onStatusChange}
                                     />
                                 ))}
                             </SortableContext>
@@ -125,6 +126,7 @@ export default function KanbanBoard({ tasks, clients, onStatusChange, onEdit, on
                         client={clients.find(c => c.id === activeTask.clientId)}
                         onEdit={onEdit}
                         onDelete={onDelete}
+                        onStatusChange={onStatusChange}
                         isDragging
                     />
                 )}
